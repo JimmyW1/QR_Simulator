@@ -4,19 +4,15 @@
 
 var express = require('express');
 var router = express.Router();
-var db = require('../data/db');
-var rsa = require('../common/rsa');
-var fs = require('fs');
-var thaiQR = require('./transThaiQR');
-var qrcs = require('./transQRCS');
-var wechat = require('./transWechat');
-var alipay = require('./transAlipay');
+var dbQRCS = require('../data/QRCSDb');
 
-var aes = require('../common/aes');
 
 router.post('/', function (req, res, next) {
     console.log("=======================UpdateQR=========================")
     console.log(req.body);
+    var qrCodeBase64 = req.body.qrCode;
+    dbQRCS.setNewQrCode(qrCodeBase64);
+    res.send({"code":"0000", "message":"success"});
 });
 
 module.exports = router;

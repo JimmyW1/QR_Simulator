@@ -4,20 +4,50 @@
 
 var express = require('express');
 var router = express.Router();
-var db = require('../data/db');
-var rsa = require('../common/rsa');
-var fs = require('fs');
-var thaiQR = require('./transThaiQR');
-var qrcs = require('./transQRCS');
-var wechat = require('./transWechat');
-var alipay = require('./transAlipay');
-
-var aes = require('../common/aes');
+var dbThaiQR = require('../data/ThaiQRDb');
+var dbQRCS = require('../data/QRCSDb');
+var dbAlipay = require('../data/AlipayDb');
+var dbWechat = require('../data/WechatDb');
 
 router.post('/', function (req, res, next) {
-    console.log("=======================Savedata=========================")
+    console.log("=======================Savedata=========================");
     console.log(req.body);
+    var scanType = req.body.scanType;
+    console.log(req.body.scanType);
+    if (scanType === "ThaiQR") {
+        saveThaiQRData(req, res, next);
+    } else if (scanType === "QRCS") {
+        saveQRCSData(req, res, next);
+    } else if (scanType === "Wechat") {
+        saveWechatData(req, res, next);
+    } else if (scanType === "Alipay") {
+        saveAlipayData(req, res, next);
+    }
+    console.log("=======================end============================");
+    res.send({"code":"0000", "message":"success"});
 });
+
+function saveThaiQRData(req, res, next) {
+    var qrCode = req.body.qrCode;
+    var amount = req.body.amount;
+    var transId = req.body.transid;
+    dbThaiQR.setThaiQRTransData(qrCode, amount, transId);
+}
+
+function saveQRCSData(req, res, next) {
+    var qrCode = req.body.qrCode;
+    var amount = req.body.amount;
+    var transId = req.body.transid;
+    var merchantPan = req.body.merchantpan;
+    var authorizeCode = req.body.authorizecode;
+    dbQRCS.setQRCSTransData(qrCode, amount, transId, merchantPan, authorizeCode);
+}
+
+function saveWechatData(req, res, next) {
+}
+
+function saveAlipayData(req, res, next) {
+}
 
 module.exports = router;
 
