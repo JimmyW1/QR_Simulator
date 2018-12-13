@@ -10,6 +10,8 @@ var users = require('./routes/users');
 var downloadTmk = require('./routes/downloadTmk');
 var downloadTwk = require('./routes/downloadTwk');
 var encryptedJson = require('./routes/encryptedJson');
+var saveData = require('./routes/savedata');
+var updateQR = require('./routes/updateQR');
 
 var app = express();
 var http = require('http');
@@ -58,14 +60,6 @@ app.get('/', function (req, res) {
     }
 });
 
-app.post('/nihao', function (req, res) {
-    if (req.protocol === 'https') {
-        res.status(200).send('This is https server');
-    } else {
-        res.status(200).send('This is http server');
-    }
-});
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -83,6 +77,8 @@ app.use('/users', users);
 app.use('/keySign/loadTmk', downloadTmk);
 app.use('/keySign/loadTwk', downloadTwk);
 app.use('/gateway/encryptedJson', encryptedJson);
+app.use('/saveData', saveData);
+app.use('/updateQR', updateQR);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
