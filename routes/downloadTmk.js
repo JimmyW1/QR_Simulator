@@ -14,6 +14,11 @@ router.post('/', function (req, res, next) {
     console.log("tid=" + tid);
     console.log("data=" + dataBase64);
 
+    if (tid.length != 8) {
+        res.send({code:'101', message:'Tid len must be 8'});
+        return;
+    }
+
     var key = fs.readFileSync("./privkey.pem").toString('utf8');
     var tek = rsa.RsaDecryptFunc(dataBase64, key);
     console.log("tek =[%s]", tek.toString('hex'));

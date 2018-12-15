@@ -60,7 +60,7 @@ function zeroPadding(data) {
 
 function removeZeroPadding(data) {
     for (var i = data.length - 1; i >= 0; i--) {
-        console.log("data[%d] =[%s]", i, data[i])
+        // console.log("data[%d] =[%s]", i, data[i])
         if (data[i] != '\0') {
             break;
         }

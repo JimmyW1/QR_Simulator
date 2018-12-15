@@ -14,6 +14,11 @@ router.post('/', function (req, res, next) {
     console.log("tid=" + tid);
     console.log("key_index=" + key_index);
 
+    if (tid.length != 8) {
+        res.send({code:'101', message:'Tid len must be 8'});
+        return;
+    }
+
     var encryptedTwk = db.getEncryptedTwkByTid(tid);
     res.send({code:'000', message:'SUCCESS', data:{key:encryptedTwk, key_index:db.getEncryptedTwkIndexByTid(tid), kcv:'null'}});
 });

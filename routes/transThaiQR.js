@@ -4,6 +4,7 @@
 
 var aes = require('../common/aes');
 var db = require('../data/db');
+var dbThaiQR = require('../data/ThaiQRDb');
 
 exports.doPostProcessing = function (reqJson, res, next) {
     console.log("=============ThaiQR processing=================");
@@ -32,17 +33,7 @@ function register(reqJson, res, next) {
     console.log("partnerCode=" + partnerCode);
 
     // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code":"0000",
-        "message":"success",
-        "data":{
-            "mid":"",
-            "tid":""
-        }
-    };
-    responsePlainData.mid = mid;
-    responsePlainData.tid = tid;
-
+    var responsePlainData = dbThaiQR.getThaiQRRegisterResponseJson(tid, mid);
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
@@ -56,7 +47,7 @@ function register(reqJson, res, next) {
 }
 
 function inquiry(reqJson, res, next) {
-    console.log("=============ThaiQR register=================");
+    console.log("=============ThaiQR inquiry=================");
     var data = reqJson.data;
 
     var mid = data.mid;
@@ -72,57 +63,7 @@ function inquiry(reqJson, res, next) {
     console.log("reference3=" + reference3);
 
     // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code": "0000",
-        "message": "success",
-        "data": [
-            {
-                "billPaymentRef1": "",
-                "billPaymentRef2": "",
-                "billPaymentRef3": "",
-                "amount": "",
-                "currencyCode": "",
-                "payeeProxyId": "",
-                "payeeProxyType": "",
-                "payeeAccountNumber": "",
-                "payerProxyId": "",
-                "payerProxyType": "",
-                "payerAccountNumber": "",
-                "sendingBankCode": "",
-                "receivingBankCode": "",
-                "transactionId": "",
-                "fastEasySlipNumber": "",
-                "transactionDateandTime": "",
-                "thaiQRTag": "",
-                "merchantId": "",
-                "merchantPAN": "",
-                "consumerPAN": "",
-                "confirmId": ""
-            }
-        ]
-    };
-    responsePlainData.data[0].billPaymentRef1 = reference1;
-    responsePlainData.data[0].billPaymentRef2 = reference2;
-    responsePlainData.data[0].billPaymentRef3 = reference3;
-    responsePlainData.data[0].amount = "2.34";
-    responsePlainData.data[0].currencyCode = "0740";
-    responsePlainData.data[0].payeeProxyId = "010554812224911";
-    responsePlainData.data[0].payeeProxyType = "BILLERID";
-    responsePlainData.data[0].payeeAccountNumber = "";
-    responsePlainData.data[0].payerProxyId = "";
-    responsePlainData.data[0].payerProxyType = "";
-    responsePlainData.data[0].payerAccountNumber = "1114965677";
-    responsePlainData.data[0].sendingBankCode = "014";
-    responsePlainData.data[0].receivingBankCode = "014";
-    responsePlainData.data[0].transactionId = "2550eab8ffc875324eabbd6e3a28e2ad";
-    responsePlainData.data[0].fastEasySlipNumber = "";
-    responsePlainData.data[0].transactionDateandTime = "2017-11-17T18:53:22.000+07:00";
-    responsePlainData.data[0].thaiQRTag = "";
-    responsePlainData.data[0].merchantId = mid;
-    responsePlainData.data[0].merchantPAN = "";
-    responsePlainData.data[0].consumerPAN = "";
-    responsePlainData.data[0].confirmId = "18021903191915389340";
-
+    var responsePlainData = dbThaiQR.inquiryTransByQrcode(reference1, reference2, reference3, mid);
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
