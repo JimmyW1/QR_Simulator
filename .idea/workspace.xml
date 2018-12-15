@@ -3,13 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="42ad3180-a482-443e-8505-538c933b9cc2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/common/aes.js" afterPath="$PROJECT_DIR$/common/aes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/ThaiQRDb.js" afterPath="$PROJECT_DIR$/data/ThaiQRDb.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/db.js" afterPath="$PROJECT_DIR$/data/db.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/downloadTmk.js" afterPath="$PROJECT_DIR$/routes/downloadTmk.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/downloadTwk.js" afterPath="$PROJECT_DIR$/routes/downloadTwk.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/encryptedJson.js" afterPath="$PROJECT_DIR$/routes/encryptedJson.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/transThaiQR.js" afterPath="$PROJECT_DIR$/routes/transThaiQR.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/QRCSDb.js" afterPath="$PROJECT_DIR$/data/QRCSDb.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/transQRCS.js" afterPath="$PROJECT_DIR$/routes/transQRCS.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/updateQR.js" afterPath="$PROJECT_DIR$/routes/updateQR.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,11 +23,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="ThaiQRDb.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ThaiQRDb.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/ThaiQRDb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2550">
-              <caret line="107" column="39" lean-forward="false" selection-start-line="107" selection-start-column="39" selection-end-line="107" selection-end-column="39" />
+            <state relative-caret-position="350">
+              <caret line="101" column="21" lean-forward="false" selection-start-line="101" selection-start-column="21" selection-end-line="101" selection-end-column="21" />
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
@@ -39,14 +35,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HashMap.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/common/HashMap.js">
+      <file leaf-file-name="updateQR.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/updateQR.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="66" column="17" lean-forward="false" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
-              <folding>
-                <element signature="e#0#47#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="275">
+              <caret line="11" column="14" lean-forward="false" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="savedata.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/savedata.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="500">
+              <caret line="42" column="18" lean-forward="true" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -59,16 +63,6 @@
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="aes.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/common/aes.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
-              <caret line="61" column="4" lean-forward="false" selection-start-line="61" selection-start-column="4" selection-end-line="61" selection-end-column="4" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -105,6 +99,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="transQRCS.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/transQRCS.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="343">
+              <caret line="93" column="49" lean-forward="false" selection-start-line="93" selection-start-column="49" selection-end-line="93" selection-end-column="49" />
+              <folding>
+                <element signature="e#0#47#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="downloadTmk.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/downloadTmk.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -115,24 +121,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="transQRCS.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/transQRCS.js">
+      <file leaf-file-name="QRCSDb.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/data/QRCSDb.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2725">
-              <caret line="111" column="28" lean-forward="false" selection-start-line="111" selection-start-column="28" selection-end-line="111" selection-end-column="28" />
+            <state relative-caret-position="375">
+              <caret line="182" column="25" lean-forward="false" selection-start-line="182" selection-start-column="25" selection-end-line="182" selection-end-column="25" />
               <folding>
                 <element signature="e#0#47#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pubkey.pem" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pubkey.pem">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -169,14 +165,11 @@
         <option value="$PROJECT_DIR$/routes/transWechat.js" />
         <option value="$PROJECT_DIR$/config/configQRCS.js" />
         <option value="$PROJECT_DIR$/config/configThaiQR.js" />
-        <option value="$PROJECT_DIR$/routes/transQRCS.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/data/WechatConfig.js" />
         <option value="$PROJECT_DIR$/data/ThaiQRConfig.js" />
         <option value="$PROJECT_DIR$/data/QRCSConfig.js" />
         <option value="$PROJECT_DIR$/common/HashMap.js" />
-        <option value="$PROJECT_DIR$/data/QRCSDb.js" />
-        <option value="$PROJECT_DIR$/routes/updateQR.js" />
         <option value="$PROJECT_DIR$/routes/savedata.js" />
         <option value="$PROJECT_DIR$/common/aes.js" />
         <option value="$PROJECT_DIR$/routes/transThaiQR.js" />
@@ -185,6 +178,9 @@
         <option value="$PROJECT_DIR$/routes/downloadTwk.js" />
         <option value="$PROJECT_DIR$/routes/encryptedJson.js" />
         <option value="$PROJECT_DIR$/data/ThaiQRDb.js" />
+        <option value="$PROJECT_DIR$/routes/transQRCS.js" />
+        <option value="$PROJECT_DIR$/routes/updateQR.js" />
+        <option value="$PROJECT_DIR$/data/QRCSDb.js" />
       </list>
     </option>
   </component>
@@ -413,12 +409,12 @@
       <workItem from="1544664511490" duration="1941000" />
       <workItem from="1544670122431" duration="12084000" />
       <workItem from="1544754395143" duration="4910000" />
-      <workItem from="1544838079836" duration="9275000" />
+      <workItem from="1544838079836" duration="14801000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103866000" />
+    <option name="totallyTimeSpent" value="109392000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -431,7 +427,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2573996" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -439,7 +435,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32901135" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.82446206" sideWeight="0.49480712" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.82446206" sideWeight="0.49480712" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -731,47 +727,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/QRCSDb.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2725">
-          <caret line="111" column="45" lean-forward="false" selection-start-line="111" selection-start-column="45" selection-end-line="111" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2000">
           <caret line="80" column="25" lean-forward="false" selection-start-line="80" selection-start-column="25" selection-end-line="80" selection-end-column="25" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/savedata.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="12" column="75" lean-forward="false" selection-start-line="12" selection-start-column="75" selection-end-line="12" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/updateQR.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="14" column="6" lean-forward="false" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/transQRCS.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2725">
-          <caret line="111" column="28" lean-forward="false" selection-start-line="111" selection-start-column="28" selection-end-line="111" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -845,10 +805,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/savedata.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="42" column="18" lean-forward="true" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/data/ThaiQRDb.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="107" column="39" lean-forward="false" selection-start-line="107" selection-start-column="39" selection-end-line="107" selection-end-column="39" />
+        <state relative-caret-position="350">
+          <caret line="101" column="21" lean-forward="false" selection-start-line="101" selection-start-column="21" selection-end-line="101" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/updateQR.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="14" lean-forward="false" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/transQRCS.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="93" column="49" lean-forward="false" selection-start-line="93" selection-start-column="49" selection-end-line="93" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/QRCSDb.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="182" column="25" lean-forward="false" selection-start-line="182" selection-start-column="25" selection-end-line="182" selection-end-column="25" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
           </folding>
