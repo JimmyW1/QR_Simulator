@@ -22,6 +22,11 @@ router.post('/', function (req, res, next) {
     var key_index = req.body.key_index;
     var data = req.body.data;
 
+    if (tid.length != 8) {
+        res.send({code:'101', message:'Tid len must be 8'});
+        return;
+    }
+
     var tidKey = db.getPlainTwkByTid(tid);
     console.log("tidkey=[%s]", tidKey);
     var descryptData = aes.AesRemoveZeroPaddingDecryptFunc(data, tidKey, "00000000000000000000000000000000");

@@ -4,10 +4,10 @@
 
 var aes = require('../common/aes');
 
-var tid1 = "A00001";
-var tid2 = "A00002";
-var tid3 = "A00003";
-var tid4 = "A00004";
+var tid1 = "A0000001";
+var tid2 = "A0000002";
+var tid3 = "A0000003";
+var tid4 = "A0000004";
 
 var tid1RegisterStatus = false;
 var tid2RegisterStatus = false;
