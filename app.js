@@ -12,6 +12,7 @@ var downloadTwk = require('./routes/downloadTwk');
 var encryptedJson = require('./routes/encryptedJson');
 var saveData = require('./routes/savedata');
 var updateQR = require('./routes/updateQR');
+var getQRImage = require('./routes/getQRImage');
 
 var app = express();
 var http = require('http');
@@ -60,41 +61,6 @@ app.get('/', function (req, res) {
     }
 });
 
-var qr = require('qr-image')
-var fs = require('fs');
-var gm = require('gm');
-var text = "11111111111111111111111";
-try {
-    // var img = qr.image(text,{size :10, type: 'png'});
-    console.log(")))))))))))))))))))))))))))))")
-    // img.pipe(fs.)
-    // res.writeHead(200, {'Content-Type': 'image/png'});
-    // img.pipe(res);
-
-    var imgValue = qr.imageSync(text, {size:10, type:'png'});
-    console.log(imgValue);
-    fs.writeFileSync("1.png", imgValue)
-
-    gm()
-        .in('-page', '+0+0')//-page是设置图片位置，所有的图片以左上为原点，向右、向下为正
-        // .in('data/images/.png')//底图，到这里第一张图就设置完了，要先设置参数，再设置图片
-        .in('-resize', '500x500')//设置微信二维码图片的大小（等比缩放）
-        // .in('-page', '+100+100')//设置微信二维码图片的位置
-        .in('data/images/1.png')//二维码图
-        .in('-page', '+145+145')//logo图位置
-        .in('data/logo/ic_alipay.png')//logo图
-        .mosaic()//图片合成
-        .write('final.png', function (err) {//图片写入
-            if (!!err) {
-                console.log(err);
-            } else {
-                console.log('ok');
-            }});
-} catch (e) {
-    res.writeHead(414, {'Content-Type': 'text/html'});
-    res.end('<h1>414 Request-URI Too Large</h1>');
-}
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -114,6 +80,7 @@ app.use('/keySign/loadTwk', downloadTwk);
 app.use('/gateway/encryptedJson', encryptedJson);
 app.use('/saveData', saveData);
 app.use('/updateQR', updateQR);
+app.use('images/Alipay000001.png', getQRImage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

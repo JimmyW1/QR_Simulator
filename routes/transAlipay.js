@@ -5,9 +5,10 @@
 
 var aes = require('../common/aes');
 var db = require('../data/db');
+var dbAlipay = require('../data/AlipayDb');
 
 exports.doPostProcessing = function (reqJson, res, next) {
-    console.log("=============QRCS processing=================");
+    console.log("=============Alipay processing=================");
     var action = reqJson.action;
     console.log("action=" + action);
 
@@ -45,37 +46,9 @@ function order(reqJson, res, next) {
     console.log("partner_transaction_id=" + partner_transaction_id);
     console.log("amount=" + amount);
     console.log("data=" + data);
+    console.log("acquirer=" + acquirer);
 
-    // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code":"0000",
-        "message":"SUCCESS",
-        "data":{
-            "payment_id":"",
-            "merchant_id":"",
-            "amount":"",
-            "currency":"",
-            "partner_transaction_id":"",
-            "terminal_id":"",
-            "status":"SUCCESS",
-            "notify_url":null,
-            "funding_source":"",
-            "qr_code":"",
-            "transaction_ref":"2018010521001004420565690804",
-            "acquirer":""
-        }
-    };
-    responsePlainData.data.payment_id = "18011107120791427930019489293098";
-    responsePlainData.data.merchant_id = mid;
-    responsePlainData.data.amount = amount;
-    responsePlainData.data.currency = currency;
-    responsePlainData.data.partner_transaction_id = partner_transaction_id;
-    responsePlainData.data.terminal_id = tid;
-    responsePlainData.data.notify_url = notify_url;
-    responsePlainData.data.funding_source = funding_source;
-    responsePlainData.data.qr_code = "http://192.168.1.104:8080/getalipayqr";
-    responsePlainData.data.acquirer = acquirer;
-
+    var responsePlainData = dbAlipay.getOrderResponseJson(tid, partner_transaction_id, amount, currency, acquirer);
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
@@ -149,8 +122,9 @@ function sale(reqJson, res, next) {
     responseJson.data = responseEncryptData;
     res.send(responseJson);
 }
+
 function inquiry(reqJson, res, next) {
-    console.log("=============Alipay order=================");
+    console.log("=============Alipay inquiry=================");
     var data = reqJson.data;
     var mid = data.merchant_id;
     var tid = data.terminal_id;
