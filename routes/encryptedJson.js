@@ -13,6 +13,8 @@ var wechat = require('./transWechat');
 var alipay = require('./transAlipay');
 
 var aes = require('../common/aes');
+var dbAlipay = require('../data/AlipayDb');
+var dbWechat = require('../data/WechatDb');
 
 router.post('/', function (req, res, next) {
     console.log("=======================encryptedJson=========================")
@@ -21,6 +23,10 @@ router.post('/', function (req, res, next) {
     var tid = req.body.tid;
     var key_index = req.body.key_index;
     var data = req.body.data;
+
+    var localAddress = req.connection.localAddress.toString().substr(7);
+    dbAlipay.setLocalIp(localAddress);
+    dbWechat.setLocalIp(localAddress);
 
     if (tid.length != 8) {
         res.send({code:'101', message:'Tid len must be 8'});

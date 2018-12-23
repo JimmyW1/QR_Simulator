@@ -51,7 +51,7 @@ function order(reqJson, res, next) {
         "code":"0000",
         "message":"SUCCESS",
         "data":{
-        "payment_id":"",
+            "payment_id":"",
             "merchant_id":"",
             "amount":"",
             "currency":"",
@@ -63,7 +63,7 @@ function order(reqJson, res, next) {
             "qr_code":"",
             "transaction_ref":"2018010521001004420565690804",
             "acquirer":""
-    }
+        }
     };
     responsePlainData.data.payment_id = "18011107120791427930019489293098";
     responsePlainData.data.merchant_id = mid;
@@ -73,7 +73,7 @@ function order(reqJson, res, next) {
     responsePlainData.data.terminal_id = tid;
     responsePlainData.data.notify_url = notify_url;
     responsePlainData.data.funding_source = funding_source;
-    responsePlainData.data.qr_code = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1545026289449&di=66196b531d6314ebbfffef5da4c4106f&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F65%2F39%2F19300544991374152881395685020.jpg";
+    responsePlainData.data.qr_code = "http://192.168.1.104:8080/getalipayqr";
     responsePlainData.data.acquirer = acquirer;
 
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
