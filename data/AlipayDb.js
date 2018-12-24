@@ -65,12 +65,12 @@ exports.getOrderResponseJson = function (tid, mid, partner_trans_id, amount, cur
     currentQrId++;
     var qrCodeContent = "Alipay" + util.sprintf("%06d", qrCodeId);
     console.log("qrCodeContent=" + qrCodeContent);
-    var qrCodeUrl = "http://" + localIp + "/images/" + qrCodeContent + ".png";
+    var qrCodeUrl = "http://" + localIp + ":8080/images/" + qrCodeContent;
     console.log("qrCodeUrl=" + qrCodeUrl);
     orderResponsePlainData.data.qr_code = qrCodeUrl;
     orderResponsePlainData.data.acquirer = acquirer;
 
-    var path = __dirname + "/images/" + qrCodeContent + ".png"
+    var path = __dirname + "/images/" + qrCodeContent + ".png";
     generateQR(path, qrCodeContent);
 
     var transRecord = new TransRecord(orderResponsePlainData.data.payment_id, qrCodeContent);
@@ -80,12 +80,12 @@ exports.getOrderResponseJson = function (tid, mid, partner_trans_id, amount, cur
     return orderResponsePlainData;
 };
 
-var qr = require('qr-image')
+var qr = require('qr-image');
 var fs = require('fs');
 var gm = require('gm');
 
 function generateQR(path, qrCodeContent) {
-    console.log("==============Alipay generate QR====================")
+    console.log("==============Alipay generate QR====================");
     try {
         // var img = qr.image(text,{size :10, type: 'png'});
         // img.pipe(fs.)
@@ -118,4 +118,66 @@ function generateQR(path, qrCodeContent) {
 
 exports.setLocalIp = function (ip) {
     localIp = ip;
+};
+
+
+//=================================================================
+//              inquiry response json data
+//=================================================================
+function AlipayInquiryResponseData() {
+    var alipayInquiryResponsePlainData = {
+        "code":"0000",
+        "message":"SUCCESS",
+        "data":{
+            "status":"APPROVED",
+            "buyer_user_id":"",
+            "buyer_login_id":"",
+            "amount":"1500",
+            "amount_cny":"303",
+            "currency":"THB",
+            "exchange_rate":"0.202028",
+            "payment_id":"",
+            "partner_transaction_id":"18010508141275824305",
+            "ref_transaction_id":"",
+            "terminal_id":"",
+            "merchant_id":"",
+            "funding_source":""
+        }
+    };
+
+    alipayInquiryResponsePlainData.data.buyer_user_id = "2088122901560424";
+    alipayInquiryResponsePlainData.data.buyer_login_id = "int*@service.*";
+
+    return alipayInquiryResponsePlainData;
 }
+
+exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source) {
+    var alipayInquiryResponsePlainData = new AlipayInquiryResponseData();
+    alipayInquiryResponsePlainData.data.payment_id = paymentId;
+    alipayInquiryResponsePlainData.data.merchant_id = mid;
+    alipayInquiryResponsePlainData.data.terminal_id = tid;
+    alipayInquiryResponsePlainData.data.funding_source = funding_source;
+
+    if (paymentIdMap.containsKey(paymentId)) {
+        var transRecord = paymentIdMap.get(paymentId);
+        if (transRecord.status === "SUCCESS" || transRecord.status === "APPROVED") {
+            alipayInquiryResponsePlainData.data.status = "APPROVED";
+            return alipayInquiryResponsePlainData;
+        } else if (transRecord.status === "VOIDED") {
+            alipayInquiryResponsePlainData.data.status = "VOIDED";
+            return alipayInquiryResponsePlainData;
+        } else {
+            return {
+                "code":"1000",
+                "message":"TRADE_NOT_EXIST",
+                "data":null
+            }
+        }
+    } else {
+        return {
+            "code":"9999",
+            "message":"TRADE_NOT_EXIST",
+            "data":null
+        }
+    }
+};

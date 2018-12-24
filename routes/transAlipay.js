@@ -44,8 +44,9 @@ function order(reqJson, res, next) {
     console.log("mid=" + mid);
     console.log("tid=" + tid);
     console.log("partner_transaction_id=" + partner_transaction_id);
+    console.log("funding_source=" + funding_source);
     console.log("amount=" + amount);
-    console.log("data=" + data);
+    console.log("currency=" + currency);
     console.log("acquirer=" + acquirer);
 
     var responsePlainData = dbAlipay.getOrderResponseJson(tid, partner_transaction_id, amount, currency, acquirer);
@@ -136,36 +137,7 @@ function inquiry(reqJson, res, next) {
     console.log("payment_id=" + payment_id);
     console.log("data=" + data);
 
-    // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code":"0000",
-        "message":"SUCCESS",
-        "data":{
-            "status":"APPROVED",
-            "buyer_user_id":"",
-            "buyer_login_id":"",
-            "amount":"1500",
-            "amount_cny":"303",
-            "currency":"THB",
-            "exchange_rate":"0.202028",
-            "payment_id":"",
-            "partner_transaction_id":"18010508141275824305",
-            "ref_transaction_id":"",
-            "terminal_id":"",
-            "merchant_id":"",
-            "funding_source":""
-        }
-    };
-    console.log("===========1======");
-    responsePlainData.data.buyer_user_id = "2088122901560424";
-    responsePlainData.data.buyer_login_id = "int*@service.*";
-    responsePlainData.data.payment_id = payment_id;
-    responsePlainData.data.merchant_id = mid;
-    responsePlainData.data.terminal_id = tid;
-    responsePlainData.data.funding_source = funding_source;
-    console.log("===========1======");
-
-
+    var responsePlainData = dbAlipay.inquiryTransByPaymentId(mid, tid, payment_id, funding_source);
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
