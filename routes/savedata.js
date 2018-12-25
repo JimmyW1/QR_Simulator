@@ -47,6 +47,8 @@ function saveWechatData(req, res, next) {
 }
 
 function saveAlipayData(req, res, next) {
+    var qrCode = req.body.qrCode;
+    dbAlipay.setAlipayTransData(qrCode);
 }
 
 module.exports = router;

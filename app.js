@@ -11,7 +11,6 @@ var downloadTmk = require('./routes/downloadTmk');
 var downloadTwk = require('./routes/downloadTwk');
 var encryptedJson = require('./routes/encryptedJson');
 var saveData = require('./routes/savedata');
-var updateQR = require('./routes/updateQR');
 var getQRImage = require('./routes/getQRImage');
 
 var app = express();
@@ -79,7 +78,6 @@ app.use('/keySign/loadTmk', downloadTmk);
 app.use('/keySign/loadTwk', downloadTwk);
 app.use('/gateway/encryptedJson', encryptedJson);
 app.use('/saveData', saveData);
-app.use('/updateQR', updateQR);
 app.use('/images/*', getQRImage);
 
 // catch 404 and forward to error handler

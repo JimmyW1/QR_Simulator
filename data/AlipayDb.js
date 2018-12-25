@@ -70,51 +70,53 @@ exports.getOrderResponseJson = function (tid, mid, partner_trans_id, amount, cur
     orderResponsePlainData.data.qr_code = qrCodeUrl;
     orderResponsePlainData.data.acquirer = acquirer;
 
-    var path = __dirname + "/images/" + qrCodeContent + ".png";
-    generateQR(path, qrCodeContent);
+    // var path = __dirname + "/images/" + qrCodeContent + ".png";
+    // generateQR(path, qrCodeContent);
 
-    var transRecord = new TransRecord(orderResponsePlainData.data.payment_id, qrCodeContent);
+    var transRecord = new TransRecord(orderResponsePlainData.data.payment_id, qrCodeUrl);
     paymentIdMap.put(orderResponsePlainData.data.payment_id, transRecord);
-    qrCodeMap.put(qrCodeContent, transRecord);
+    qrCodeMap.put(qrCodeUrl, transRecord);
+    console.log(paymentIdMap.keys());
+    console.log(qrCodeMap.keys());
 
     return orderResponsePlainData;
 };
 
-var qr = require('qr-image');
-var fs = require('fs');
-var gm = require('gm');
-
-function generateQR(path, qrCodeContent) {
-    console.log("==============Alipay generate QR====================");
-    try {
-        // var img = qr.image(text,{size :10, type: 'png'});
-        // img.pipe(fs.)
-        // res.writeHead(200, {'Content-Type': 'image/png'});
-        // img.pipe(res);
-
-        var qrImage = qr.imageSync(qrCodeContent, {size:10, type:'png'});
-        var tmpImagePath = __dirname + '/tmp.png';
-        fs.writeFileSync(tmpImagePath, qrImage);
-
-        gm().in('-page', '+0+0')//-page是设置图片位置，所有的图片以左上为原点，向右、向下为正
-            // .in('data/images/.png')//底图，到这里第一张图就设置完了，要先设置参数，再设置图片
-            .in('-resize', '350x350')//设置微信二维码图片的大小（等比缩放）
-            // .in('-page', '+100+100')//设置微信二维码图片的位置
-            .in(tmpImagePath)//二维码图
-            .in('-page', '+145+145')//logo图位置
-            .in(__dirname + '/logo/ic_alipay.png')//logo图
-            .mosaic()//图片合成
-            .write(path, function (err) {//图片写入
-                if (!!err) {
-                    console.log(err);
-                } else {
-                    console.log('ok');
-                }});
-    } catch (e) {
-        res.writeHead(414, {'Content-Type': 'text/html'});
-        res.end('<h1>414 Request-URI Too Large</h1>');
-    }
-}
+// var qr = require('qr-image');
+// var fs = require('fs');
+// var gm = require('gm');
+//
+// function generateQR(path, qrCodeContent) {
+//     console.log("==============Alipay generate QR====================");
+//     try {
+//         // var img = qr.image(text,{size :10, type: 'png'});
+//         // img.pipe(fs.)
+//         // res.writeHead(200, {'Content-Type': 'image/png'});
+//         // img.pipe(res);
+//
+//         var qrImage = qr.imageSync(qrCodeContent, {size:10, type:'png'});
+//         var tmpImagePath = __dirname + '/tmp.png';
+//         fs.writeFileSync(tmpImagePath, qrImage);
+//
+//         gm().in('-page', '+0+0')//-page是设置图片位置，所有的图片以左上为原点，向右、向下为正
+//             // .in('data/images/.png')//底图，到这里第一张图就设置完了，要先设置参数，再设置图片
+//             .in('-resize', '350x350')//设置微信二维码图片的大小（等比缩放）
+//             // .in('-page', '+100+100')//设置微信二维码图片的位置
+//             .in(tmpImagePath)//二维码图
+//             .in('-page', '+145+145')//logo图位置
+//             .in(__dirname + '/logo/ic_alipay.png')//logo图
+//             .mosaic()//图片合成
+//             .write(path, function (err) {//图片写入
+//                 if (!!err) {
+//                     console.log(err);
+//                 } else {
+//                     console.log('ok');
+//                 }});
+//     } catch (e) {
+//         res.writeHead(414, {'Content-Type': 'text/html'});
+//         res.end('<h1>414 Request-URI Too Large</h1>');
+//     }
+// }
 
 exports.setLocalIp = function (ip) {
     localIp = ip;
@@ -152,14 +154,17 @@ function AlipayInquiryResponseData() {
 }
 
 exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source) {
+    console.log("=================Alipay inquiryTransByPaymentId=============")
     var alipayInquiryResponsePlainData = new AlipayInquiryResponseData();
     alipayInquiryResponsePlainData.data.payment_id = paymentId;
     alipayInquiryResponsePlainData.data.merchant_id = mid;
     alipayInquiryResponsePlainData.data.terminal_id = tid;
     alipayInquiryResponsePlainData.data.funding_source = funding_source;
 
+    console.log("find paymentId=" + paymentId + " record status:" + paymentIdMap.containsKey(paymentId));
     if (paymentIdMap.containsKey(paymentId)) {
         var transRecord = paymentIdMap.get(paymentId);
+        console.log("paymentId record status=" + transRecord.status);
         if (transRecord.status === "SUCCESS" || transRecord.status === "APPROVED") {
             alipayInquiryResponsePlainData.data.status = "APPROVED";
             return alipayInquiryResponsePlainData;
@@ -179,5 +184,91 @@ exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source)
             "message":"TRADE_NOT_EXIST",
             "data":null
         }
+    }
+};
+
+//=================================================================
+//              cancel response json data
+//=================================================================
+var alipayCancelResponsePlainData = {
+    "code":"0000",
+    "message":"SUCCESS",
+    "data":{
+        "status":"VOIDED",
+        "amount":"1500",
+        "payment_id":"",
+        "partner_transaction_id":"",
+        "ref_transaction_id":"2018010521001004420565690804",
+        "terminal_id":"",
+        "merchant_id":"",
+        "funding_source":"ALIPAY"
+    }
+};
+
+exports.doCancelProcess = function (mid, tid, paymentId, partner_transaction_id, funding_source) {
+    console.log("=================Alipay doCancelProcess=============")
+
+    alipayCancelResponsePlainData.data.payment_id = paymentId;
+    alipayCancelResponsePlainData.data.merchant_id = mid;
+    alipayCancelResponsePlainData.data.terminal_id = tid;
+    alipayCancelResponsePlainData.data.partner_transaction_id = partner_transaction_id;
+    alipayCancelResponsePlainData.data.funding_source = funding_source;
+
+    console.log("find paymentId=" + paymentId + " record status:" + paymentIdMap.containsKey(paymentId));
+    if (paymentIdMap.containsKey(paymentId)) {
+        var transRecord = qrCodeMap.get(qrCode);
+        transRecord.status = "VOIDED";
+    }
+
+    return alipayCancelResponsePlainData;
+};
+
+//=================================================================
+//              sale response json data
+//=================================================================
+var ref_transaction_id = 1;
+var alipaySaleResponsePlainData = {
+    "code":"0000",
+    "message":"SUCCESS",
+    "data":{
+        "status":"",
+        "buyer_user_id":"",
+        "buyer_login_id":"",
+        "amount":"",
+        "amount_cny":"303",
+        "currency":"THB",
+        "exchange_rate":"202028",
+        "payment_id":"18010508141257639318231758646279",
+        "partner_transaction_id":"18010508141275824305",
+        "ref_transaction_id":"2018010521001004420565690804",
+        "terminal_id":"",
+        "merchant_id":"",
+        "funding_source":""
+    }
+};
+
+exports.doSaleProcess = function (authCode, mid, tid, partner_transaction_id, funding_source, amount, currency) {
+    alipaySaleResponsePlainData.data.status = "APPROVED";
+    alipaySaleResponsePlainData.data.buyer_user_id = "2088122901560424";
+    alipaySaleResponsePlainData.data.buyer_login_id = "int*@service.*";
+    alipaySaleResponsePlainData.data.merchant_id = mid;
+    alipaySaleResponsePlainData.data.amount = amount;
+    alipaySaleResponsePlainData.data.currency = currency;
+    alipaySaleResponsePlainData.data.partner_transaction_id = partner_transaction_id;
+    alipaySaleResponsePlainData.data.terminal_id = tid;
+
+    return alipayCancelResponsePlainData;
+};
+
+
+//=================================================================
+//              pay received json data
+//=================================================================
+exports.setAlipayTransData = function (qrCode) {
+    console.log("=================Alipay setAlipayTransData=============")
+    console.log("find qrCode=" + qrCode + " record status:" + qrCodeMap.containsKey(qrCode));
+    if (qrCodeMap.containsKey(qrCode)) {
+        var transRecord = qrCodeMap.get(qrCode);
+        transRecord.status = "SUCCESS";
     }
 };

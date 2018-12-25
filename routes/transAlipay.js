@@ -84,33 +84,7 @@ function sale(reqJson, res, next) {
     console.log("auth_code=" + auth_code);
 
     // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code":"0000",
-        "message":"SUCCESS",
-        "data":{
-            "status":"",
-            "buyer_user_id":"",
-            "buyer_login_id":"",
-            "amount":"",
-            "amount_cny":"303",
-            "currency":"THB",
-            "exchange_rate":"202028",
-            "payment_id":"18010508141257639318231758646279",
-            "partner_transaction_id":"18010508141275824305",
-            "ref_transaction_id":"2018010521001004420565690804",
-            "terminal_id":"",
-            "merchant_id":"",
-            "funding_source":""
-        }
-    };
-    responsePlainData.data.status = "APPROVED";
-    responsePlainData.data.buyer_user_id = "2088122901560424";
-    responsePlainData.data.buyer_login_id = "int*@service.*";
-    responsePlainData.data.merchant_id = mid;
-    responsePlainData.data.amount = amount;
-    responsePlainData.data.currency = currency;
-    responsePlainData.data.partner_transaction_id = partner_transaction_id;
-    responsePlainData.data.terminal_id = tid;
+    var responsePlainData = dbAlipay.doSaleProcess(auth_code, mid, tid, partner_transaction_id, funding_source, amount, currency);
 
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
@@ -178,28 +152,7 @@ function cancel(reqJson, res, next) {
     console.log("data=" + data);
 
     // TODO check mid tid and so on.
-    var responsePlainData = {
-        "code":"0000",
-        "message":"SUCCESS",
-        "data":{
-        "status":"VOIDED",
-            "amount":"1500",
-            "payment_id":"",
-            "partner_transaction_id":"",
-            "ref_transaction_id":"2018010521001004420565690804",
-            "terminal_id":"",
-            "merchant_id":"",
-            "funding_source":"ALIPAY"
-    }
-    };
-    console.log("===========1======");
-    responsePlainData.data.payment_id = payment_id;
-    responsePlainData.data.merchant_id = mid;
-    responsePlainData.data.terminal_id = tid;
-    responsePlainData.data.partner_transaction_id=partner_transaction_id;
-    responsePlainData.data.funding_source = funding_source;
-    console.log("===========1======");
-
+    var responsePlainData = dbAlipay.doCancelProcess(mid, tid, payment_id, partner_transaction_id, funding_source);
 
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
