@@ -56,7 +56,9 @@ exports.getOrderResponseJson = function (tid, mid, partner_trans_id, amount, cur
     orderResponsePlainData.data.merchant_id = mid;
     orderResponsePlainData.data.amount = amount;
     orderResponsePlainData.data.currency = currency;
+    console.log("getOrderResponseJson partner_trans_id=" + partner_trans_id)
     orderResponsePlainData.data.partner_transaction_id = partner_trans_id;
+    console.log("getOrderResponseJson data.partner_transaction_id=" + orderResponsePlainData.data.partner_transaction_id)
     orderResponsePlainData.data.terminal_id = tid;
     orderResponsePlainData.data.notify_url = "";
     orderResponsePlainData.data.funding_source = "ALIPAY";
@@ -216,7 +218,7 @@ exports.doCancelProcess = function (mid, tid, paymentId, partner_transaction_id,
 
     console.log("find paymentId=" + paymentId + " record status:" + paymentIdMap.containsKey(paymentId));
     if (paymentIdMap.containsKey(paymentId)) {
-        var transRecord = qrCodeMap.get(qrCode);
+        var transRecord = paymentIdMap.get(paymentId);
         transRecord.status = "VOIDED";
     }
 
@@ -248,7 +250,7 @@ var alipaySaleResponsePlainData = {
 };
 
 exports.doSaleProcess = function (authCode, mid, tid, partner_transaction_id, funding_source, amount, currency) {
-    alipaySaleResponsePlainData.data.status = "APPROVED";
+    alipaySaleResponsePlainData.data.status = "UNKNOWN";
     alipaySaleResponsePlainData.data.buyer_user_id = "2088122901560424";
     alipaySaleResponsePlainData.data.buyer_login_id = "int*@service.*";
     alipaySaleResponsePlainData.data.merchant_id = mid;
@@ -257,7 +259,7 @@ exports.doSaleProcess = function (authCode, mid, tid, partner_transaction_id, fu
     alipaySaleResponsePlainData.data.partner_transaction_id = partner_transaction_id;
     alipaySaleResponsePlainData.data.terminal_id = tid;
 
-    return alipayCancelResponsePlainData;
+    return alipaySaleResponsePlainData;
 };
 
 

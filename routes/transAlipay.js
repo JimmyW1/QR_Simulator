@@ -48,8 +48,8 @@ function order(reqJson, res, next) {
     console.log("amount=" + amount);
     console.log("currency=" + currency);
     console.log("acquirer=" + acquirer);
-
-    var responsePlainData = dbAlipay.getOrderResponseJson(tid, partner_transaction_id, amount, currency, acquirer);
+    // (tid, mid, partner_trans_id, amount, currency, acquirer)
+    var responsePlainData = dbAlipay.getOrderResponseJson(tid,mid, partner_transaction_id, amount, currency, acquirer);
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
@@ -100,6 +100,9 @@ function sale(reqJson, res, next) {
 
 function inquiry(reqJson, res, next) {
     console.log("=============Alipay inquiry=================");
+    
+    
+    
     var data = reqJson.data;
     var mid = data.merchant_id;
     var tid = data.terminal_id;
@@ -110,8 +113,8 @@ function inquiry(reqJson, res, next) {
     console.log("funding_source=" + funding_source);
     console.log("payment_id=" + payment_id);
     console.log("data=" + data);
-
     var responsePlainData = dbAlipay.inquiryTransByPaymentId(mid, tid, payment_id, funding_source);
+   // var responsePlainData={"code":"0000","message":"SUCCESS","data":{"status":"VOIDED","buyer_user_id":"2088822724597312","buyer_login_id":"mer***@alitest.*","amount":"12","amount_cny":"0.03","currency":"THB","exchange_rate":"0.21179790","payment_id":"19011406342457037482657414779103","partner_transaction_id":"19011413341915375383462491330119","ref_transaction_id":"2019011422001497310535467660","terminal_id":"91330119","merchant_id":"323111101000000","funding_source":"ALIPAY"}};
     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
@@ -152,9 +155,9 @@ function cancel(reqJson, res, next) {
     console.log("data=" + data);
 
     // TODO check mid tid and so on.
-    var responsePlainData = dbAlipay.doCancelProcess(mid, tid, payment_id, partner_transaction_id, funding_source);
-
-    console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
+   // var responsePlainData = dbAlipay.doCancelProcess(mid, tid, payment_id, partner_transaction_id, funding_source);
+    var responsePlainData={"code":"9999","message":"TRADE_NOT_EXIST_IN_DUPP","data":null};
+     console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
     var tidTwk = db.getPlainTwkByTid(tid);
     console.log("tidTwk=" + tidTwk);
     var responseEncryptData = aes.AesZeroPaddingEncryptFunc(JSON.stringify(responsePlainData), tidTwk, "00000000000000000000000000000000");

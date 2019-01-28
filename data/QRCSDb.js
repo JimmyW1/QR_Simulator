@@ -129,7 +129,7 @@ function qrcsResponseJson() {
             "authorizeCode":"",
             "paymentMethod":"",
             "transactionType":"",
-            "typeOfCard":""
+            "paymentChannel":""
         }]
     };
     qrcsInquiryResponsePlainData.data[0].amount = "1.0";
@@ -147,7 +147,7 @@ function qrcsResponseJson() {
     qrcsInquiryResponsePlainData.data[0].authorizeCode = "123456";
     qrcsInquiryResponsePlainData.data[0].paymentMethod = "QRCS";
     qrcsInquiryResponsePlainData.data[0].transactionType = "AUTH";
-    qrcsInquiryResponsePlainData.data[0].typeOfCard = "";
+    qrcsInquiryResponsePlainData.data[0].paymentChannel = "";
 
     return qrcsInquiryResponsePlainData;
 }
