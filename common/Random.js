@@ -17,8 +17,11 @@ var crypto = require('crypto');
 //     // handle error
 // }
 //
-// exports.getRandomHexStrSync = function (len) {
-//     var buf = crypto.randomBytes(16);
-//     var token = buf.toString('hex');
-//
-// }
+exports.getRandomHexStrSync = function (len) {
+    var buf = crypto.randomBytes(len);
+    var token = buf.toString('hex');
+    var randomHexStr = token.substr(0, len);
+    console.log("randomHexStr=" + randomHexStr);
+
+    return randomHexStr;
+}

@@ -3,6 +3,7 @@
  */
 
 var aes = require('../common/aes');
+var random = require('../common/Random');
 
 var tid1 = "A0000001";
 var tid2 = "A0000002";
@@ -57,20 +58,27 @@ var tid4TwkEncrypted = "26TpVUq3kvtInIaWQdT44yefeMmQ7tPQj6xn/tCaCk4=";
 exports.setTek = function (tid, tek) {
     if (tid === tid1) {
         tid1Tek = tek;
-        // tid1EnryptedTmk = aes.AesEncryptFunc(tid1Tmk, tek, "00000000000000000000000000000000");
+        tid1Tmk = random.getRandomHexStrSync(32);
         tid1EnryptedTmk = aes.AesZeroPaddingEncryptFunc(tid1Tmk, tek, "00000000000000000000000000000000");
+        console.log("plain tid1 tmk=" + tid1Tmk);
         console.log("encrypted tid1 tmk=" + tid1EnryptedTmk);
     } else if (tid === tid2) {
         tid2Tek = tek;
+        tid2Tmk = random.getRandomHexStrSync(32);
         tid2EnryptedTmk = aes.AesEncryptFunc(tid2Tmk, tek, "00000000000000000000000000000000");
+        console.log("plain tid2 tmk=" + tid1Tmk);
         console.log("encrypted tid2 tmk=" + tid2EnryptedTmk);
     } else if (tid === tid3) {
         tid3Tek = tek;
+        tid3Tmk = random.getRandomHexStrSync(32);
         tid3EnryptedTmk = aes.AesEncryptFunc(tid3Tmk, tek, "00000000000000000000000000000000");
+        console.log("plain tid3 tmk=" + tid1Tmk);
         console.log("encrypted tid3 tmk=" + tid3EnryptedTmk);
     } else {
         tid4Tek = tek;
+        tid4Tmk = random.getRandomHexStrSync(32);
         tid4EnryptedTmk = aes.AesEncryptFunc(tid4Tmk, tek, "00000000000000000000000000000000");
+        console.log("plain tid4 tmk=" + tid1Tmk);
         console.log("encrypted tid4 tmk=" + tid4EnryptedTmk);
     }
 };
@@ -85,7 +93,7 @@ exports.getRegisterStatusByTid = function (tid) {
     } else {
         return tid4RegisterStatus;
     }
-}
+};
 
 exports.setRegisterStatusByTid = function (tid, status) {
     if (tid === tid1) {
@@ -138,12 +146,24 @@ exports.getEncryptedTwkIndexByTid = function (tid) {
 
 exports.getEncryptedTwkByTid = function (tid) {
     if (tid === tid1) {
+        tid1Twk = random.getRandomHexStrSync(32);
+        tid1TwkEncrypted = getEncryptTwkBase64(tid1Tmk, tid1Twk);
+        console.log("tid1TwkEncrypted=" + tid1TwkEncrypted);
         return tid1TwkEncrypted;
     } else if (tid === tid2) {
+        tid2Twk = random.getRandomHexStrSync(32);
+        tid2TwkEncrypted = getEncryptTwkBase64(tid2Tmk, tid2Twk);
+        console.log("tid2TwkEncrypted=" + tid2TwkEncrypted);
         return tid2TwkEncrypted;
     } else if (tid === tid3) {
+        tid3Twk = random.getRandomHexStrSync(32);
+        tid3TwkEncrypted = getEncryptTwkBase64(tid3Tmk, tid3Twk);
+        console.log("tid3TwkEncrypted=" + tid3TwkEncrypted);
         return tid3TwkEncrypted;
     } else {
+        tid4Twk = random.getRandomHexStrSync(32);
+        tid4TwkEncrypted = getEncryptTwkBase64(tid4Tmk, tid4Twk);
+        console.log("tid4TwkEncrypted=" + tid4TwkEncrypted);
         return tid4TwkEncrypted;
     }
 };
@@ -159,6 +179,10 @@ exports.getPlainTwkByTid = function (tid) {
         return tid4Twk;
     }
 };
+
+function getEncryptTwkBase64(plainTmk, plainTwk) {
+    return aes.AesEncryptFunc(plainTwk, plainTmk, "00000000000000000000000000000000");
+}
 
 exports.getTid1EncryptedTmk = function () {
     return tid1EnryptedTmk;
