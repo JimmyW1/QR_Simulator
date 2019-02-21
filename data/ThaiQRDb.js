@@ -123,6 +123,10 @@ exports.setThaiQRTransData = function (qrcode, amount, transId) {
     var inquiryResponsePlainData = responseJson();
     inquiryResponsePlainData.data[0].amount = amount;
     inquiryResponsePlainData.data[0].transactionId = transId;
+    if (transId.length==0){
+        console.log("setThaiQRTransData transactionId=[%s]", transId);
+        inquiryResponsePlainData.data[0].transactionId="2550eab8ffc875324eabbd6e3a28e2ad";
+    }
     thaiQRTransRecordMap.put(refrence1, inquiryResponsePlainData);
     console.log(thaiQRTransRecordMap.keys());
 };
@@ -215,4 +219,65 @@ exports.getPullInquiryTransData = function (mid,tid,transRef,sendingBank,referen
     console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
     return inquiryResponsePlainData;
 };
+function responseVoidJson() {
+    console.log("responsePlainData=[%s]", "kd;lfk");
+    var inquiryResponsePlainData = {
+        "code": "0000",
+        "message": "success",
+        "data": [
+            {
+                "transactionId": "71700057055273000044",
+                "transactionDateandTime": "2018-11-23T07:48:31.000+00:00"
+            }
+        ]
+    };
+    return inquiryResponsePlainData;
+}
+/*
+ *    var mid = data.mid;
+ var tid = data.tid;
+ var transRef = data.transRef;
+ var sendingBank = data.sendingBank;
+ var reference1 = data.reference1;
+ var reference2 = data.reference2;
+ var reference3 = data.reference3;
+ * */
+exports.getVoidTransData = function (mid,tid,transRef) {
+    // How to get reference1 , please ref QR PromptPay docment.
+    console.log("mid=" + mid+ tid+ transRef);
+    var inquiryResponsePlainData = responseVoidJson();
+    console.log("mid=" + mid+ tid+ transRef);
+    inquiryResponsePlainData.data[0].transactionId = transRef;
+    console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
+    return inquiryResponsePlainData;
+};
+//Format: CCYY-MMDDThh:mm:ss.sss+hh:mmEg. 2017-03-13T09:00:00.000+07:00
+function CurentTime() {
+    var now = new Date();
+    var year = now.getFullYear();       //年
+    var month = now.getMonth() + 1;     //月
+    var day = now.getDate();            //日
+    var hh = now.getHours();            //时
+    var mm = now.getMinutes();          //分
+    var ss= now.getSeconds();
 
+    var clock = year + "-";
+
+    if(month < 10)
+        clock += "0";
+
+    clock += month + "-";
+
+    if(day < 10)
+        clock += "0";
+
+    clock += day + " ";
+
+    if(hh < 10)
+        clock += "0";
+
+    clock +="T"+hh + ":";
+    if (mm < 10) clock += '0';
+    clock += mm;
+    return(clock);
+}
