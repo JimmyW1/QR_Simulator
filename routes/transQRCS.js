@@ -35,18 +35,9 @@ function register(reqJson, res, next) {
     console.log("partnerCode=" + partnerCode);
 
     // TODO check mid tid and so on.
-    var responsePlainData = dbQRCS.getQRCSRegisterResponseJson(mid, tid);
+    var responseEncryptData = dbQRCS.getQRCSRegisterResponseJson(mid, tid);
 
-    console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
-    var tidTwk = db.getPlainTwkByTid(tid);
-    console.log("tidTwk=" + tidTwk);
-    var responseEncryptData = aes.AesZeroPaddingEncryptFunc(JSON.stringify(responsePlainData), tidTwk, "00000000000000000000000000000000");
-    var index = db.getEncryptedTwkIndexByTid(tid);
-
-    var responseJson = {"key_index": "", "data": ""};
-    responseJson.key_index = index;
-    responseJson.data = responseEncryptData;
-    res.send(responseJson);
+    response(res,tid,responseEncryptData);
 }
 
 function generate(reqJson, res, next) {
@@ -64,18 +55,9 @@ function generate(reqJson, res, next) {
     console.log("invoice=" + invoice);
 
     // TODO check mid tid and so on.
-    var responsePlainData = dbQRCS.getQrcsGenerateQRResponseJson(tid);
+    var responseEncryptData = dbQRCS.getQrcsGenerateQRResponseJson(tid);
 
-    console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
-    var tidTwk = db.getPlainTwkByTid(tid);
-    console.log("tidTwk=" + tidTwk);
-    var responseEncryptData = aes.AesZeroPaddingEncryptFunc(JSON.stringify(responsePlainData), tidTwk, "00000000000000000000000000000000");
-    var index = db.getEncryptedTwkIndexByTid(tid);
-
-    var responseJson = {"key_index": "", "data": ""};
-    responseJson.key_index = index;
-    responseJson.data = responseEncryptData;
-    res.send(responseJson);
+    response(res,tid,responseEncryptData);
 }
 
 function inquiry(reqJson, res, next) {
@@ -91,16 +73,19 @@ function inquiry(reqJson, res, next) {
     console.log("qrid=" + qrid);
 
     // TODO check mid tid and so on.
-    var responsePlainData = dbQRCS.inquiryTransByQrcode(qrid);
+    var responseEncryptData = dbQRCS.inquiryTransByQrcode(qrid);
 
-    console.log("responsePlainData=[%s]", JSON.stringify(responsePlainData));
-    var tidTwk = db.getPlainTwkByTid(tid);
-    console.log("tidTwk=" + tidTwk);
-    var responseEncryptData = aes.AesZeroPaddingEncryptFunc(JSON.stringify(responsePlainData), tidTwk, "00000000000000000000000000000000");
-    var index = db.getEncryptedTwkIndexByTid(tid);
+    response(res,tid,responseEncryptData);
+}
+function response(res,tid,responsePlainData) {
+    db.getPlainTwkByTid(tid,function (tidTwk) {
+        console.log("tidTwk=" + tidTwk);
+        var responseEncryptData = aes.AesZeroPaddingEncryptFunc(JSON.stringify(responsePlainData), tidTwk, "00000000000000000000000000000000");
+        var index = db.getEncryptedTwkIndexByTid(tid);
 
-    var responseJson = {"key_index": "", "data": ""};
-    responseJson.key_index = index;
-    responseJson.data = responseEncryptData;
-    res.send(responseJson);
+        var responseJson = {"key_index": "", "data": ""};
+        responseJson.key_index = index;
+        responseJson.data = responseEncryptData;
+        res.send(responseJson);
+    });
 }

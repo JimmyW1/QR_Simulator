@@ -129,25 +129,7 @@ exports.setLocalIp = function (ip) {
 //              inquiry response json data
 //=================================================================
 function AlipayInquiryResponseData() {
-    var alipayInquiryResponsePlainData = {
-        "code":"0000",
-        "message":"SUCCESS",
-        "data":{
-            "status":"APPROVED",
-            "buyer_user_id":"",
-            "buyer_login_id":"",
-            "amount":"1500",
-            "amount_cny":"303",
-            "currency":"THB",
-            "exchange_rate":"0.202028",
-            "payment_id":"",
-            "partner_transaction_id":"18010508141275824305",
-            "ref_transaction_id":"",
-            "terminal_id":"",
-            "merchant_id":"",
-            "funding_source":""
-        }
-    };
+    var alipayInquiryResponsePlainData ={"code":"0000","message":"SUCCESS","data":{"status":"REVERSED","buyer_user_id":"2088122901560424","buyer_login_id":"int***@service.*","amount":"7","amount_cny":"0.02","currency":"THB","exchange_rate":"0.22903211","payment_id":"19081610550612457333626105923781","partner_transaction_id":"19081617550020457515606891330119","ref_transaction_id":"2019081622001460420591791008","terminal_id":"91330119","merchant_id":"323111101000000","funding_source":"ALIPAY"}}
 
     alipayInquiryResponsePlainData.data.buyer_user_id = "2088122901560424";
     alipayInquiryResponsePlainData.data.buyer_login_id = "int*@service.*";
@@ -158,10 +140,13 @@ function AlipayInquiryResponseData() {
 exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source) {
     console.log("=================Alipay inquiryTransByPaymentId=============")
     var alipayInquiryResponsePlainData = new AlipayInquiryResponseData();
-    alipayInquiryResponsePlainData.data.payment_id = paymentId;
-    alipayInquiryResponsePlainData.data.merchant_id = mid;
-    alipayInquiryResponsePlainData.data.terminal_id = tid;
-    alipayInquiryResponsePlainData.data.funding_source = funding_source;
+    // alipayInquiryResponsePlainData.data.payment_id = paymentId;
+    // alipayInquiryResponsePlainData.data.merchant_id = mid;
+    // alipayInquiryResponsePlainData.data.terminal_id = tid;
+    // alipayInquiryResponsePlainData.data.funding_source = funding_source;
+    //
+    // alipayInquiryResponsePlainData.data.status = "APPROVED";
+    return alipayInquiryResponsePlainData;
 
     console.log("find paymentId=" + paymentId + " record status:" + paymentIdMap.containsKey(paymentId));
     if (paymentIdMap.containsKey(paymentId)) {
@@ -175,14 +160,14 @@ exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source)
             return alipayInquiryResponsePlainData;
         } else {
             return {
-                "code":"1000",
+                "code":"41001",
                 "message":"TRADE_NOT_EXIST",
                 "data":null
             }
         }
     } else {
         return {
-            "code":"9999",
+            "code":"41002",
             "message":"TRADE_NOT_EXIST",
             "data":null
         }
@@ -193,7 +178,8 @@ exports.inquiryTransByPaymentId = function (tid, mid, paymentId, funding_source)
 //              cancel response json data
 //=================================================================
 var alipayCancelResponsePlainData = {
-    "code":"0000",
+    //VOIDED UNKNOWN
+    "code":"45165",
     "message":"SUCCESS",
     "data":{
         "status":"VOIDED",
@@ -225,32 +211,72 @@ exports.doCancelProcess = function (mid, tid, paymentId, partner_transaction_id,
     return alipayCancelResponsePlainData;
 };
 
+var alipayReversedResponsePlainData = {
+    "code": "0000",
+    "message": "SUCCESS",
+    "data": {
+        "status": "REVERSED",
+        "amount": "1500",
+        "payment_id": "18010508141257639318231758646279",
+        "partner_transaction_id": "18010508141275824305",
+        "ref_transaction_id": "2018010521001004420565690804",
+        "terminal_id": "74900001",
+        "merchant_id": "001000000000010",
+        "funding_source": "WECHAT"
+    }
+};
+
+exports.doReversedProcess = function (mid, tid, paymentId, partner_transaction_id, funding_source) {
+    console.log("=================Alipay doCancelProcess=============")
+
+    alipayReversedResponsePlainData.data.payment_id = paymentId;
+    alipayReversedResponsePlainData.data.merchant_id = mid;
+    alipayReversedResponsePlainData.data.terminal_id = tid;
+    alipayReversedResponsePlainData.data.partner_transaction_id = partner_transaction_id;
+    alipayReversedResponsePlainData.data.funding_source = funding_source;
+
+    console.log("find paymentId=" + paymentId + " record status:" + paymentIdMap.containsKey(paymentId));
+    if (paymentIdMap.containsKey(paymentId)) {
+        var transRecord = paymentIdMap.get(paymentId);
+        console.log("paymentId record status=" + transRecord.status);
+        alipayCancelResponsePlainData.data.status="REVERSED";
+    } else {
+        return {
+            "code":"9999",
+            "message":"TRADE_NOT_EXIST",
+            "data":null
+        }
+    }
+
+    return alipayCancelResponsePlainData;
+};
+
 //=================================================================
 //              sale response json data
 //=================================================================
 var ref_transaction_id = 1;
 var alipaySaleResponsePlainData = {
-    "code":"0000",
-    "message":"SUCCESS",
-    "data":{
-        "status":"",
-        "buyer_user_id":"",
-        "buyer_login_id":"",
-        "amount":"",
-        "amount_cny":"303",
-        "currency":"THB",
-        "exchange_rate":"202028",
-        "payment_id":"18010508141257639318231758646279",
-        "partner_transaction_id":"18010508141275824305",
-        "ref_transaction_id":"2018010521001004420565690804",
-        "terminal_id":"",
-        "merchant_id":"",
-        "funding_source":""
+    "code": "0000",
+    "message": "SUCCESS",
+    "data": {
+        "status": "APPROVED",
+        "buyer_user_id": "2088122901560424",
+        "buyer_login_id": "int***@service.*",
+        "amount": "156",
+        "amount_cny": "0.34",
+        "currency": "THB",
+        "exchange_rate": "0.22077590",
+        "payment_id": "19060409324965445675789441808148",
+        "partner_transaction_id": "19060416324304179864516691330119",
+        "ref_transaction_id": "2019060422001460420585840844",
+        "terminal_id": "91330119",
+        "merchant_id": "323111101000000",
+        "funding_source": "ALIPAY"
     }
 };
 
 exports.doSaleProcess = function (authCode, mid, tid, partner_transaction_id, funding_source, amount, currency) {
-    alipaySaleResponsePlainData.data.status = "UNKNOWN";
+    alipaySaleResponsePlainData.data.status = "APPROVED";
     alipaySaleResponsePlainData.data.buyer_user_id = "2088122901560424";
     alipaySaleResponsePlainData.data.buyer_login_id = "int*@service.*";
     alipaySaleResponsePlainData.data.merchant_id = mid;

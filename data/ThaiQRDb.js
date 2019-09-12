@@ -48,7 +48,7 @@ function responseJson() {
                 "billPaymentRef2": "",
                 "billPaymentRef3": "",
                 "amount": "",
-                "currencyCode": "",
+                "currencyCode": "840",
                 "payeeProxyId": "",
                 "payeeProxyType": "",
                 "payeeAccountNumber": "",
@@ -99,6 +99,11 @@ exports.inquiryTransByQrcode = function (reference1, reference2, reference3, mid
     console.log("inquiry key=" + qrcode);
     console.log(thaiQRTransRecordMap.containsKey(qrcode));
     console.log(thaiQRTransRecordMap.keys());
+    var inquiryResponsePlainData = responseJson();
+    inquiryResponsePlainData.data[0].billPaymentRef1 = reference1;
+    inquiryResponsePlainData.data[0].billPaymentRef3 = reference3;
+    inquiryResponsePlainData.data[0].merchantId = mid;
+    return inquiryResponsePlainData;
     if (thaiQRTransRecordMap.containsKey(qrcode)) {
         var inquiryResponsePlainData = thaiQRTransRecordMap.get(qrcode);
         inquiryResponsePlainData.data[0].billPaymentRef1 = reference1;
@@ -133,32 +138,33 @@ exports.setThaiQRTransData = function (qrcode, amount, transId) {
 function responsePullInquiryJson() {
     console.log("responsePlainData=[%s]", "kd;lfk");
     var inquiryResponsePlainData = {
-        "res_code": "0000",
-        "res_desc": "success",
-        "data": [
-            {
-                "payeeProxyId": "311040039475100",
-                "payeeProxyType": "BILLERID",
-                "payeeAccountNumber": "0141111111111",
-                "payerProxyId": null,
-                "payerProxyType": "BANKAC",
-                "payerAccountNumber": "xxxx-xx641-3",
-                "sendingBankCode": "014",
-                "receivingBankCode": "014",
-                "amount": "2.0100",
-                "transactionId": "71700057055273000044",
-                "fastEasySlipNumber": null,
-                "transactionDateandTime": "2018-11-23T07:48:31.000+00:00",
-                "billPaymentRef1": "71700057055273000044",
-                "billPaymentRef2": "",
-                "billPaymentRef3": "AIN71700057",
-                "thaiQRTag": null,
-                "currencyCode": "764",
-                "paymentMethod": "BILLERID",
-                "transactionType": null
-            }
-        ]
-    };
+            "code": "0000",
+            "message": "success",
+            "data": [
+                {
+                    "payeeProxyId": "311040039475100",
+                    "payeeProxyType": "BILLERID",
+                    "payeeAccountNumber": "0141111111111",
+                    "payerProxyId": null,
+                    "payerProxyType": "BANKAC",
+                    "payerAccountNumber": "xxxx-xx641-3",
+                    "sendingBankCode": "014",
+                    "receivingBankCode": "014",
+                    "amount": "2.0100",
+                    "transactionId": "71700057055273000044",
+                    "fastEasySlipNumber": null,
+                    "transactionDateandTime": "2018-11-23T07:48:31.000+00:00",
+                    "billPaymentRef1": "71700057055273000044",
+                    "billPaymentRef2": "",
+                    "billPaymentRef3": "AIN71700057",
+                    "thaiQRTag": null,
+                    "currencyCode": "764",
+                    "paymentMethod": "BILLERID",
+                    "transactionType": null
+                }
+            ]
+        }
+        ;
     console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
     inquiryResponsePlainData.data[0].billPaymentRef1 = "";
     console.log("responsePlainData=[%s]",  inquiryResponsePlainData.data[0].billPaymentRef1);
@@ -209,27 +215,132 @@ function responsePullInquiryJson() {
 exports.getPullInquiryTransData = function (mid,tid,transRef,sendingBank,reference1, reference2, reference3) {
     // How to get reference1 , please ref QR PromptPay docment.
     console.log("mid=" + mid+ tid+ transRef+ sendingBank+ reference1);
-    var inquiryResponsePlainData = responsePullInquiryJson();
-    console.log("mid=" + mid+ tid+ transRef+ sendingBank+ reference1);
-    inquiryResponsePlainData.data[0].transactionId = transRef;
-    inquiryResponsePlainData.data[0].billPaymentRef1 = reference1;
-    inquiryResponsePlainData.data[0].billPaymentRef2 = reference2;
-    inquiryResponsePlainData.data[0].billPaymentRef3 = reference3;
-    inquiryResponsePlainData.data[0].sendingBankCode = sendingBank;
-    console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
-    return inquiryResponsePlainData;
+    console.log("inquiry key=" + reference1);
+    console.log(thaiQRTransRecordMap.containsKey(reference1));
+    console.log(thaiQRTransRecordMap.keys());
+    if (thaiQRTransRecordMap.containsKey(reference1)) {
+        var inquiryResponsePlainData = responsePullInquiryJson();
+        console.log("mid=" + mid+ tid+ transRef+ sendingBank+ reference1);
+        inquiryResponsePlainData.data[0].transactionId = transRef;
+        inquiryResponsePlainData.data[0].billPaymentRef1 = reference1;
+        inquiryResponsePlainData.data[0].billPaymentRef2 = reference2;
+        inquiryResponsePlainData.data[0].billPaymentRef3 = reference3;
+        inquiryResponsePlainData.data[0].sendingBankCode = sendingBank;
+        console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
+        return inquiryResponsePlainData;
+    } else {
+        return {"code":"FW003","message":"Destination bank does not support or implement this service","data":[{"code":"6501","message":"Destination bank does not support or implement this service","severitylevel":"ERROR","moreInfo":"6501: Destination bank does not support or implement this service, Please see original error from ITMX.","originalErrorCode":"6501","originalErrorDesc":"Destination bank does not support or implement this service"}]}
+    }
 };
+
+function responseThaiQrBscanCJson() {
+    console.log("responsePlainData=[%s]", "kd;lfk");
+    // var inquiryResponsePlainData = {
+    //     "code": "0623",
+    //     "message": "à¸§à¸à¹à¸à¸´à¸à¹à¸¡à¹à¸à¸­ à¸à¸£à¸¸à¸à¸²à¸à¸³à¸£à¸²à¸¢à¸à¸²à¸£à¹à¸«à¸¡à¹à¸­à¸µà¸à¸à¸£à¸±à¹à¸ (165-Transaction amount or number of transactions is over limit)",
+    //     "data": [{
+    //         "code": "LG0004",
+    //         "message": "There are some error from legacy",
+    //         "severitylevel": "ERROR",
+    //         "originalError": {
+    //             "transactionInformation": {
+    //                 "errorCode": "165",
+    //                 "errorDescription": "Transaction is over limit"
+    //             }
+    //         }
+    //     }]
+    // }
+    var inquiryResponsePlainData = {
+            "code": "0000",
+            "message":  "success",
+            "data":
+                {
+                    "payeeProxyId":"311040039475100",
+                    "payeeProxyType": "BILLERID",
+                    "payeeAccountNumber": "0141111111111",
+                    "payerProxyId": null,
+                    "payerProxyType": "BANKAC",
+                    "payerAccountNumber": "xxxx­xx641­3",
+                    "sendingBankCode": "014",
+                    "receivingBankCode": "014",
+                    "amount": "2.0100",
+                    "transactionId": "71700057055273000044",
+                    "fastEasySlipNumber": null,
+                    "transactionDateandTime": "2018­11­23T07:48:31.000+00:00",
+                    "billPaymentRef1": "71700057055273000044",
+                    "billPaymentRef2": "",
+                    "billPaymentRef3": "AIN71700057",
+                    "thaiQRTag": null,
+                    "currencyCode": "764",
+                    "paymentMethod": "BILLERID",
+                    "transactionType": null
+                }
+        }
+
+    console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
+    var data=inquiryResponsePlainData.data;
+    data.billPaymentRef1 = "";
+    console.log("responsePlainData=[%s]",  data.billPaymentRef1);
+    data.billPaymentRef2 = "";
+    console.log("responsePlainData=[%s]",  data.billPaymentRef2);
+    data.billPaymentRef3 = "";
+    console.log("responsePlainData=[%s]",   data.billPaymentRef3);
+    data.amount = "2.34";
+    console.log("responsePlainData=[%s]",  data.amount);
+    data.currencyCode = "0740";
+    console.log("responsePlainData=[%s]",  data.currencyCode);
+    data.payeeProxyId = "311040039475100";
+    console.log("responsePlainData=[%s]", "kd;lfk");
+    data.payeeProxyType = "BILLERID";
+    console.log("responsePlainData=[%s]", data.payeeProxyType);
+    data.payeeAccountNumber = "";
+    console.log("responsePlainData=[%s]",  data.payeeAccountNumber);
+    data.payerProxyId = "";
+    console.log("responsePlainData=[%s]",  data.payerProxyId);
+    data.payerProxyType = "";
+    console.log("responsePlainData=[%s]",  data.payerProxyType);
+    data.payerAccountNumber = "1114965677";
+    console.log("responsePlainData=[%s]",  data.payerAccountNumber);
+    data.sendingBankCode = "014";
+    console.log("responsePlainData=[%s]",  data.sendingBankCode);
+    data.receivingBankCode = "014";
+    console.log("responsePlainData=[%s]",  data.receivingBankCode);
+    data.transactionId = "2550eab8ffc875324eabbd6e3a28e2ad";
+    console.log("responsePlainData=[%s]",  data.transactionId);
+    data.fastEasySlipNumber = "";
+    console.log("responsePlainData=[%s]",  data.fastEasySlipNumber);
+    data.transactionDateandTime = "2017-11-17T18:53:22.000+07:00";
+    console.log("responsePlainData=[%s]", data.transactionDateandTime);
+    data.thaiQRTag = "";
+    console.log("responsePlainData=[%s]", data.transactionDateandTime);
+    console.log("responsePlainData=[%s]", inquiryResponsePlainData);
+    return inquiryResponsePlainData;
+}
+exports.getThaiQRBscanCTransData = function (tid,transRef,amount,reference1, reference2, reference3,billerId) {
+    // How to get reference1 , please ref QR PromptPay docment.
+    console.log("request=" + tid+ transRef+ billerId+ reference1);
+    var thaiQrBscanC = responseThaiQrBscanCJson();
+    /*console.log("request=" + tid+ transRef+ billerId+ reference1);
+    thaiQrBscanC.data.transactionId = transRef;
+    thaiQrBscanC.data.billPaymentRef1 = reference1;
+    thaiQrBscanC.data.billPaymentRef2 = reference2;
+    thaiQrBscanC.data.billPaymentRef3 = reference3;
+    thaiQrBscanC.data.amount = amount;
+    thaiQrBscanC.data.billerId = billerId;
+    console.log("responsePlainData=[%s]", JSON.stringify(thaiQrBscanC));*/
+    return thaiQrBscanC;
+};
+
 function responseVoidJson() {
     console.log("responsePlainData=[%s]", "kd;lfk");
     var inquiryResponsePlainData = {
         "code": "0000",
         "message": "success",
-        "data": [
-            {
-                "transactionId": "71700057055273000044",
-                "transactionDateandTime": "2018-11-23T07:48:31.000+00:00"
-            }
-        ]
+        "data": {
+        "transactionId": "71710074132145000053",
+            "transactionDateTime": "2019-04-02T18:25:41.968+07:00",
+            "transactionDatetime": "2019-04-02T18:26:31.056+07:00"
+    }
     };
     return inquiryResponsePlainData;
 }
@@ -247,7 +358,7 @@ exports.getVoidTransData = function (mid,tid,transRef) {
     console.log("mid=" + mid+ tid+ transRef);
     var inquiryResponsePlainData = responseVoidJson();
     console.log("mid=" + mid+ tid+ transRef);
-    inquiryResponsePlainData.data[0].transactionId = transRef;
+    inquiryResponsePlainData.transactionId = transRef;
     console.log("responsePlainData=[%s]", JSON.stringify(inquiryResponsePlainData));
     return inquiryResponsePlainData;
 };

@@ -20,13 +20,16 @@ router.post('/', function (req, res, next) {
     }
 
     var key = fs.readFileSync("./privkey.pem").toString('utf8');
+    console.log("key =[%s]", key);
     var tek = rsa.RsaDecryptFunc(dataBase64, key);
     console.log("tek =[%s]", tek.toString('hex'));
 
-    db.setTek(tid, tek)
-    var encryptedTmk = db.getEncryptedTmkByTid(tid);
-
-    res.send({code:'000', message:'SUCCESS', data:{key:encryptedTmk, key_index:db.getEncryptedTmkIndexByTid(tid), kcv:'null'}});
+    db.setTek(tid, tek,function () {
+        db.getEncryptedTmkByTid(tid,function (encryptedTmk) {
+            console.log("response",{code:'000', message:'SUCCESS', data:{key:encryptedTmk, key_index:db.getEncryptedTmkIndexByTid(tid), kcv:'null'}});
+            res.send({code:'000', message:'SUCCESS', data:{key:encryptedTmk, key_index:db.getEncryptedTmkIndexByTid(tid), kcv:'null'}});
+        });
+    })
 });
 
 /* GET users listing. */
